@@ -1,0 +1,191 @@
+{
+  "base": "http://127.0.0.1:8012",
+  "python": "3.9.1",
+  "database": "F:/erp/data/perf.db (38.9 MB)",
+  "data": {
+    "products": 10000,
+    "warehouses": 5,
+    "ledger": 100700,
+    "documents": 10002,
+    "audit": 30196
+  },
+  "results": [
+    {
+      "scenario": "登录（PBKDF2 600k）",
+      "count": 13,
+      "errors": 0,
+      "p50_ms": 285.8,
+      "p95_ms": 343.6,
+      "p99_ms": 355.3,
+      "max_ms": 355.3,
+      "mean_ms": 295.1
+    },
+    {
+      "scenario": "商品列表 page=1 size=20",
+      "count": 35,
+      "errors": 0,
+      "p50_ms": 31.8,
+      "p95_ms": 39.2,
+      "p99_ms": 45.2,
+      "max_ms": 45.2,
+      "mean_ms": 31.3
+    },
+    {
+      "scenario": "商品搜索 q=PERF-009",
+      "count": 35,
+      "errors": 0,
+      "p50_ms": 33.5,
+      "p95_ms": 49.7,
+      "p99_ms": 50.7,
+      "max_ms": 50.7,
+      "mean_ms": 37.9
+    },
+    {
+      "scenario": "库存余额列表",
+      "count": 35,
+      "errors": 0,
+      "p50_ms": 60.4,
+      "p95_ms": 75.1,
+      "p99_ms": 84.4,
+      "max_ms": 84.4,
+      "mean_ms": 59.6
+    },
+    {
+      "scenario": "库存流水筛选",
+      "count": 20,
+      "errors": 0,
+      "p50_ms": 32.2,
+      "p95_ms": 47.9,
+      "p99_ms": 49.9,
+      "max_ms": 49.9,
+      "mean_ms": 32.5
+    },
+    {
+      "scenario": "入库单列表",
+      "count": 35,
+      "errors": 0,
+      "p50_ms": 31.6,
+      "p95_ms": 41.7,
+      "p99_ms": 46.2,
+      "max_ms": 46.2,
+      "mean_ms": 32.2
+    },
+    {
+      "scenario": "工作台汇总",
+      "count": 35,
+      "errors": 0,
+      "p50_ms": 47.3,
+      "p95_ms": 51.8,
+      "p99_ms": 62.4,
+      "max_ms": 62.4,
+      "mean_ms": 46.5
+    },
+    {
+      "scenario": "工作台 30 天趋势",
+      "count": 35,
+      "errors": 0,
+      "p50_ms": 32.3,
+      "p95_ms": 36.1,
+      "p99_ms": 47.9,
+      "max_ms": 47.9,
+      "mean_ms": 33.0
+    },
+    {
+      "scenario": "报表库存汇总",
+      "count": 35,
+      "errors": 0,
+      "p50_ms": 67.3,
+      "p95_ms": 85.2,
+      "p99_ms": 103.3,
+      "max_ms": 103.3,
+      "mean_ms": 65.2
+    },
+    {
+      "scenario": "审计日志列表",
+      "count": 35,
+      "errors": 0,
+      "p50_ms": 49.4,
+      "p95_ms": 65.5,
+      "p99_ms": 66.5,
+      "max_ms": 66.5,
+      "mean_ms": 50.6
+    },
+    {
+      "scenario": "入库单详情（200 行目标）",
+      "count": 25,
+      "errors": 0,
+      "p50_ms": 33.3,
+      "p95_ms": 51.5,
+      "p99_ms": 55.4,
+      "max_ms": 55.4,
+      "mean_ms": 38.0
+    },
+    {
+      "scenario": "创建 200 行入库单",
+      "count": 1,
+      "errors": 0,
+      "p50_ms": 127.2,
+      "p95_ms": 127.2,
+      "p99_ms": 127.2,
+      "max_ms": 127.2,
+      "mean_ms": 127.2
+    },
+    {
+      "scenario": "确认 200 行入库单",
+      "count": 1,
+      "errors": 0,
+      "p50_ms": 165.9,
+      "p95_ms": 165.9,
+      "p99_ms": 165.9,
+      "max_ms": 165.9,
+      "mean_ms": 165.9
+    },
+    {
+      "scenario": "CSV 导出库存（1 万行）",
+      "count": 1,
+      "errors": 0,
+      "p50_ms": 977.4,
+      "p95_ms": 977.4,
+      "p99_ms": 977.4,
+      "max_ms": 977.4,
+      "mean_ms": 977.4,
+      "bytes": 1309796
+    },
+    {
+      "scenario": "CSV 导出流水（约 4.4 万行）",
+      "count": 1,
+      "errors": 0,
+      "p50_ms": 1478.8,
+      "p95_ms": 1478.8,
+      "p99_ms": 1478.8,
+      "max_ms": 1478.8,
+      "mean_ms": 1478.8,
+      "bytes": 6079786,
+      "rows": 44873,
+      "status": 200
+    },
+    {
+      "scenario": "并发 10 线程 × 20 商品列表",
+      "count": 200,
+      "errors": 0,
+      "p50_ms": 126.1,
+      "p95_ms": 172.2,
+      "p99_ms": 182.4,
+      "max_ms": 207.1,
+      "mean_ms": 129.0,
+      "requests": 200
+    },
+    {
+      "scenario": "并发 20 客户端混合读写（各 10 次）",
+      "count": 200,
+      "errors": 0,
+      "p50_ms": 265.9,
+      "p95_ms": 351.2,
+      "p99_ms": 509.3,
+      "max_ms": 542.0,
+      "mean_ms": 267.2,
+      "requests": 200
+    }
+  ],
+  "generated_at": "2026-11-09T01:26:54+0800"
+}

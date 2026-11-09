@@ -1,0 +1,80 @@
+{
+  "results": [
+    {
+      "name": "匿名访问受保护接口返回 401",
+      "ok": true,
+      "detail": "status=401"
+    },
+    {
+      "name": "首页 CSP 存在且禁止内联脚本",
+      "ok": true,
+      "detail": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' da"
+    },
+    {
+      "name": "安全头 nosniff / frame deny / referrer",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "管理员登录成功",
+      "ok": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "会话 Cookie HttpOnly + SameSite=Lax + Path=/",
+      "ok": true,
+      "detail": "lager_session=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IkFETUlOIiwidmVyIjoxLCJpYXQiOjE3OTQyMjI2NDgsI"
+    },
+    {
+      "name": "本地 HTTP 下 Cookie 不误加 Secure",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "JWT 为三段式",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "篡改 JWT 签名被拒绝",
+      "ok": true,
+      "detail": "status=401"
+    },
+    {
+      "name": "搜索参数 SQL 注入无 500/泄露",
+      "ok": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "连续失败 5 次后触发 429",
+      "ok": true,
+      "detail": "statuses=[401, 401, 401, 401, 401, 429]"
+    },
+    {
+      "name": "请求体超过 1MB 返回 413",
+      "ok": true,
+      "detail": "status=413"
+    },
+    {
+      "name": "413 响应仍包含安全头与请求 ID",
+      "ok": true,
+      "detail": "request_id=94a7e5f54d0c4ef6b12acbf656ef53c4"
+    },
+    {
+      "name": "登录后可访问系统信息",
+      "ok": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "登出成功",
+      "ok": true,
+      "detail": "status=204"
+    },
+    {
+      "name": "登出后旧会话立即失效",
+      "ok": true,
+      "detail": "status=401"
+    }
+  ],
+  "passed": 15
+}

@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# App data
+data/
+backups/
+*.db
+*.db-wal
+*.db-shm
+debug.log
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Test artifacts
+.ui-test/
+.edge-profile/
+.pnpm-store/
+login.png
+flow-*.png
+route-*.png
+sweep-result.json
+
+# Env & editor
+.env
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

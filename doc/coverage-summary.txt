@@ -1,0 +1,89 @@
+﻿Name                                 Stmts   Miss  Cover   Missing
+------------------------------------------------------------------
+app\__init__.py                          0      0   100%
+app\core\__init__.py                     0      0   100%
+app\core\audit.py                       16      1    94%   28
+app\core\config.py                      55      6    89%   44, 55-56, 62, 65, 68
+app\core\context.py                      9      0   100%
+app\core\database.py                    59      3    95%   21, 37, 45
+app\core\dates.py                       16      0   100%
+app\core\deps.py                        25      3    88%   26-27, 31
+app\core\errors.py                      49      7    86%   82-94, 103-105
+app\core\middleware.py                  68     13    81%   28, 45, 55, 85-86, 88, 99-105, 116, 121, 124-125
+app\core\numbering.py                   24      2    92%   31-32
+app\core\pagination.py                   9      0   100%
+app\core\permissions.py                 14      0   100%
+app\core\roles.py                       10      1    90%   22
+app\core\security.py                    99     26    74%   33-35, 41-42, 51-58, 81, 85-86, 105, 107, 109, 113, 138-141, 150-151
+app\main.py                             68     18    74%   67, 103-106, 117-129
+app\modules\__init__.py                  0      0   100%
+app\modules\audit\__init__.py            0      0   100%
+app\modules\audit\models.py             17      0   100%
+app\modules\audit\router.py             16      0   100%
+app\modules\audit\schemas.py            17      0   100%
+app\modules\audit\service.py            28      5    82%   27, 29, 31, 44, 46
+app\modules\auth\__init__.py             0      0   100%
+app\modules\auth\router.py              39      0   100%
+app\modules\auth\service.py             95     13    86%   35-41, 49, 52-53, 68-69, 184
+app\modules\dashboard\__init__.py        0      0   100%
+app\modules\dashboard\router.py         27      1    96%   43
+app\modules\dashboard\schemas.py        32      0   100%
+app\modules\dashboard\service.py        94      3    97%   46, 150, 155
+app\modules\inbound\__init__.py          0      0   100%
+app\modules\inbound\models.py           35      0   100%
+app\modules\inbound\router.py           36      0   100%
+app\modules\inbound\schemas.py          79      1    99%   40
+app\modules\inbound\service.py         203     32    84%   30, 37, 39, 48, 50, 57, 61, 64, 168, 170-171, 180, 182, 257-259, 289-291, 302, 313, 315, 317, 334-341, 374-375, 384, 416-418
+app\modules\inventory\__init__.py        0      0   100%
+app\modules\inventory\models.py         29      0   100%
+app\modules\inventory\router.py         26      0   100%
+app\modules\inventory\schemas.py        70      1    99%   57
+app\modules\inventory\service.py       143     12    92%   70, 72, 139, 174, 202, 226, 229, 231, 315, 317, 320, 322
+app\modules\outbound\__init__.py         0      0   100%
+app\modules\outbound\models.py          32      0   100%
+app\modules\outbound\router.py          36      2    94%   67-68
+app\modules\outbound\schemas.py         74      1    99%   39
+app\modules\outbound\service.py        192     30    84%   30, 37, 39, 48, 50, 57, 60, 63, 154, 156-157, 166, 168, 242-244, 254, 276-278, 287, 289, 332, 359-360, 369, 388, 401-403
+app\modules\partners\__init__.py         0      0   100%
+app\modules\partners\models.py          19      0   100%
+app\modules\partners\router.py          35      0   100%
+app\modules\partners\schemas.py         85     12    86%   14, 17, 20-21, 40, 68-73, 83
+app\modules\partners\service.py         84     13    85%   51-52, 59, 74, 106-108, 138-140, 179-181
+app\modules\products\__init__.py         0      0   100%
+app\modules\products\models.py          23      1    96%   36
+app\modules\products\router.py          32      0   100%
+app\modules\products\schemas.py         92     15    84%   30, 41-44, 63-68, 78-81
+app\modules\products\service.py        112     22    80%   26, 61-62, 70, 72, 96, 104, 113-117, 153-155, 185-187, 210, 225-227
+app\modules\registry.py                 12      0   100%
+app\modules\reports\__init__.py          0      0   100%
+app\modules\reports\router.py           36      0   100%
+app\modules\reports\schemas.py          44      0   100%
+app\modules\reports\service.py         196     15    92%   47, 104, 130-131, 140, 210, 274, 309, 344, 348, 350, 353, 355, 358, 415
+app\modules\stocktakes\__init__.py       0      0   100%
+app\modules\stocktakes\models.py        30      0   100%
+app\modules\stocktakes\router.py        36      0   100%
+app\modules\stocktakes\schemas.py       70      1    99%   40
+app\modules\stocktakes\service.py      171     20    88%   29, 35, 135-136, 144, 146, 185, 187, 209, 248-250, 260, 265, 294, 296, 365-366, 375, 394
+app\modules\system\__init__.py           0      0   100%
+app\modules\system\router.py            22      0   100%
+app\modules\system\schemas.py           15      0   100%
+app\modules\transfers\__init__.py        0      0   100%
+app\modules\transfers\models.py         30      0   100%
+app\modules\transfers\router.py         36      0   100%
+app\modules\transfers\schemas.py        70      1    99%   39
+app\modules\transfers\service.py       183     29    84%   29, 35, 39, 41, 47, 50, 53, 150, 152-153, 161, 163, 231-233, 243, 262-264, 273, 275, 317, 359-360, 369, 388, 401-403
+app\modules\users\__init__.py            0      0   100%
+app\modules\users\models.py             18      1    94%   29
+app\modules\users\router.py             26      0   100%
+app\modules\users\schemas.py            44      0   100%
+app\modules\users\service.py            87     11    87%   33, 35, 44, 59, 87-89, 157-159, 173
+app\modules\warehouses\__init__.py       0      0   100%
+app\modules\warehouses\models.py        16      1    94%   22
+app\modules\warehouses\router.py        32      0   100%
+app\modules\warehouses\schemas.py       60      7    88%   24, 44-49
+app\modules\warehouses\service.py      125     23    82%   26, 79-80, 89, 98, 100, 113-117, 139-141, 166, 173, 195-197, 207, 215, 245, 262-264
+app\schemas\__init__.py                  0      0   100%
+app\schemas\common.py                   19      0   100%
+app\seed.py                             58      7    88%   24, 27, 45, 236-239
+------------------------------------------------------------------
+TOTAL                                 3759    360    90%
