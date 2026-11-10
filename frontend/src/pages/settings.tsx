@@ -407,6 +407,7 @@ export function SettingsPage() {
               </Button>
             </div>
             <textarea
+              aria-label="默认提示词"
               value={form.default_prompt}
               onChange={(event) => update("default_prompt", event.target.value)}
               rows={18}

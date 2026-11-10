@@ -9,8 +9,12 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from http.cookiejar import CookieJar
+from urllib.parse import urlparse
 
 BASE = (sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:8011").rstrip("/")
+PARSED_BASE = urlparse(BASE)
+HOST = PARSED_BASE.hostname or "127.0.0.1"
+PORT = PARSED_BASE.port or (443 if PARSED_BASE.scheme == "https" else 80)
 results: list[dict] = []
 
 
@@ -90,7 +94,7 @@ def main() -> None:
     check("连续失败 5 次后触发 429", statuses[:5] == [401] * 5 and statuses[5] == 429, f"statuses={statuses}")
 
     # Oversized body: only the declared length is needed; server must reject before parsing.
-    connection = http.client.HTTPConnection("127.0.0.1", 8011, timeout=20)
+    connection = http.client.HTTPConnection(HOST, PORT, timeout=20)
     connection.request(
         "POST",
         "/api/v1/auth/login",

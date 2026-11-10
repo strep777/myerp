@@ -157,6 +157,7 @@ export function InventoryLedgerPage() {
             <p className="field-label">开始日期</p>
             <Input
               type="date"
+              aria-label="开始日期"
               value={dateFrom}
               onChange={(event) => setDateFrom(event.target.value)}
               className="h-9"
@@ -166,6 +167,7 @@ export function InventoryLedgerPage() {
             <p className="field-label">结束日期</p>
             <Input
               type="date"
+              aria-label="结束日期"
               value={dateTo}
               onChange={(event) => setDateTo(event.target.value)}
               className="h-9"
@@ -208,8 +210,6 @@ export function InventoryLedgerPage() {
                 ? "试试调整商品、仓库、类型或日期范围。"
                 : "当入库单、出库单、调拨单或盘点完成后，流水会显示在这里。"
             }
-            actionLabel={hasFilters ? "清除筛选" : undefined}
-            onAction={hasFilters ? resetFilters : undefined}
           />
         </div>
       ) : (

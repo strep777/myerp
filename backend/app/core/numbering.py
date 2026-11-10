@@ -24,6 +24,16 @@ def next_document_no(db: Session, model: Any, prefix: str) -> str:
         .filter(column.like(like))
         .scalar()
     )
+    # Deleted documents remain in the append-only audit trail. Include those
+    # numbers so deleting the highest document cannot make a number reusable.
+    from app.modules.audit.models import AuditLog
+
+    audited = (
+        db.query(func.max(AuditLog.entity_no))
+        .filter(AuditLog.entity_no.like(like))
+        .scalar()
+    )
+    latest = max([value for value in (latest, audited) if value], default=None)
     sequence = 1
     if latest:
         try:
@@ -35,3 +45,4 @@ def next_document_no(db: Session, model: Any, prefix: str) -> str:
 
 def adjustment_no(sequence: int) -> str:
     return f"ADJ-{business_today()}-{sequence:04d}"
+

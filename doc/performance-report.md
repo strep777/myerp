@@ -4,7 +4,7 @@
 > 测试对象：`F:\erp` 后端 API（单 worker、SQLite）  
 > 原始数据：[`performance-raw.json`](performance-raw.json)  
 > 测试脚本：[`scripts/bench_seed.py`](../scripts/bench_seed.py)、[`scripts/bench_api.py`](../scripts/bench_api.py)  
-> 版本说明：本报告的后端性能数据在 v1.0 基线上测得。v1.1 新增的 AI 设置/分析/导入以本地校验与入库编排为主，尚未做独立基准；最新前端构建（含剪贴板图片、Ollama 动态模型）为 `index 373.18 KB / gzip 107.38 KB`、`vendor 165.20 / 54.17`、`ui 135.53 / 40.18`、CSS 66.17 / 12.89 KB，合计 gzip 约 214.6 KB，仍低于 300 KB 目标。v1.1 的功能与安全结果见 [test-report.md](test-report.md)。
+> 版本说明：本报告的后端性能数据在 v1.0 基线上测得。v1.1 新增的 AI 设置/分析/导入以本地校验与入库编排为主，尚未做独立基准；最新前端构建（含剪贴板图片、Ollama 动态模型、全量 QA 修复）为 `index 373.27 KB / gzip 107.42 KB`、`vendor 165.20 / 54.17`、`ui 135.53 / 40.18`、CSS 66.17 / 12.89 KB，合计 gzip 约 214.7 KB，仍低于 300 KB 目标。v1.1 的功能与安全结果见 [test-report.md](test-report.md)。
 
 ## 1. 结论摘要
 
@@ -17,7 +17,7 @@
 | 200 行入库确认 | 165.9 ms，≤ 500 ms |
 | 4.4 万行流水 CSV | 1.48 s，≤ 5 s |
 | 20 客户端混合读写 | 200 请求，0 错误，p95 351 ms |
-| 前端初始 JS（gzip） | v1.0 73.46 KB；v1.1 三个入口 chunk 合计约 201.7 KB，含 CSS 约 214.6 KB，≤ 300 KB |
+| 前端初始 JS（gzip） | v1.0 73.46 KB；v1.1 三个入口 chunk 合计约 201.8 KB，含 CSS 约 214.7 KB，≤ 300 KB |
 
 ## 2. 环境与数据集
 
@@ -99,12 +99,12 @@ cd F:\erp\backend
 
 | 文件 | 原始体积 | gzip |
 |---|---:|---:|
-| `index-CyGGl9bx.css` | 66.00 KB | 12.87 KB |
-| `ui-amHZrrcR.js` | 135.53 KB | 40.18 KB |
+| `index-z512jWJR.css` | 66.17 KB | 12.89 KB |
+| `ui-DKjN2sGm.js` | 135.53 KB | 40.18 KB |
 | `vendor-C7hBj5eU.js` | 165.20 KB | 54.17 KB |
-| `index-5-KtENkE.js` | 373.18 KB | 107.38 KB |
+| `index-C86WWZgy.js` | 373.27 KB | 107.42 KB |
 
-三个 JS chunk 合计 gzip 约 201.7 KB；含 CSS 约 214.6 KB，满足 ≤ 300 KB 目标。
+三个 JS chunk 合计 gzip 约 201.8 KB；含 CSS 约 214.7 KB，满足 ≤ 300 KB 目标。
 
 ## 7. 容量与限制
 

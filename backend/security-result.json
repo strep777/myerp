@@ -23,7 +23,7 @@
     {
       "name": "会话 Cookie HttpOnly + SameSite=Lax + Path=/",
       "ok": true,
-      "detail": "lager_session=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IkFETUlOIiwidmVyIjoxLCJpYXQiOjE3OTQyMjI2NDgsI"
+      "detail": "lager_session=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IkFETUlOIiwidmVyIjoxLCJpYXQiOjE3OTQzMzEzMDEsI"
     },
     {
       "name": "本地 HTTP 下 Cookie 不误加 Secure",
@@ -58,7 +58,7 @@
     {
       "name": "413 响应仍包含安全头与请求 ID",
       "ok": true,
-      "detail": "request_id=94a7e5f54d0c4ef6b12acbf656ef53c4"
+      "detail": "request_id=16d4e39db9dc42cc8bc1dacaa89d5aed"
     },
     {
       "name": "登录后可访问系统信息",

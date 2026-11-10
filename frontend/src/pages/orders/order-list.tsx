@@ -154,6 +154,7 @@ export function OrderListPage({ type }: { type: OrderType }) {
             <p className="field-label">开始日期</p>
             <Input
               type="date"
+              aria-label="开始日期"
               value={dateFrom}
               onChange={(event) => setDateFrom(event.target.value)}
               className="h-9"
@@ -163,6 +164,7 @@ export function OrderListPage({ type }: { type: OrderType }) {
             <p className="field-label">结束日期</p>
             <Input
               type="date"
+              aria-label="结束日期"
               value={dateTo}
               onChange={(event) => setDateTo(event.target.value)}
               className="h-9"
@@ -203,10 +205,8 @@ export function OrderListPage({ type }: { type: OrderType }) {
                 ? "试试调整状态、仓库、对方或日期范围。"
                 : `创建${meta.singular}后，在草稿状态可以继续编辑，确认后自动更新库存。`
             }
-            actionLabel={hasFilters ? "清除筛选" : canWriteDocs ? meta.newTitle : undefined}
-            onAction={
-              hasFilters ? resetFilters : canWriteDocs ? () => navigate(`${meta.path}/new`) : undefined
-            }
+            actionLabel={canWriteDocs ? meta.newTitle : undefined}
+            onAction={canWriteDocs ? () => navigate(`${meta.path}/new`) : undefined}
           />
         </div>
       ) : (

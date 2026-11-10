@@ -294,8 +294,9 @@ function CreateStocktakeDialog({
           </p>
         </DialogHeader>
         <DialogBody className="space-y-4">
-          <FormField label="盘点仓库" required>
+          <FormField label="盘点仓库" htmlFor="stocktake-warehouse" required>
             <Select
+              id="stocktake-warehouse"
               value={warehouseId}
               onValueChange={setWarehouseId}
               placeholder="选择仓库"
