@@ -168,24 +168,19 @@ function SidebarContent({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className={cn("flex h-[54px] shrink-0 items-center gap-2.5 px-4", collapsed && !mobile && "justify-center px-2")}>
-        <div className="mac-dots shrink-0">
-          <i className="mac-dot-red" />
-          <i className="mac-dot-yellow" />
-          <i className="mac-dot-green" />
-        </div>
-        {!collapsed || mobile ? (
-          <div className="ml-auto flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-[8px] bg-gradient-to-b from-[#3399ff] to-[#007AFF] shadow-[0_2px_5px_rgba(0,122,255,0.3)]">
-              <Boxes className="h-4 w-4 text-white" strokeWidth={2} />
-            </div>
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-7 w-7 items-center justify-center rounded-[8px] bg-gradient-to-b from-[#3399ff] to-[#007AFF] shadow-[0_2px_5px_rgba(0,122,255,0.3)]">
+            <Boxes className="h-4 w-4 text-white" strokeWidth={2} />
+          </div>
+          {!collapsed || mobile ? (
             <div className="leading-none">
-              <p className="text-[13px] font-semibold tracking-[-0.01em]">Lager 仓储</p>
-              <p className="mt-1 text-[9px] font-medium uppercase tracking-[0.12em] text-muted-foreground/70">
-                Warehouse
+              <p className="text-[13px] font-semibold tracking-[-0.02em]">Lager</p>
+              <p className="mt-1 text-[9px] font-medium tracking-[0.12em] text-muted-foreground/70">
+                仓储管理
               </p>
             </div>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
       </div>
 
       <nav className="sidebar-scroll min-h-0 flex-1 overflow-y-auto px-2.5 pb-2 pt-1.5" aria-label="主导航">
@@ -318,7 +313,7 @@ export function AppShell() {
           ? ["业务", "调拨单"]
           : location.pathname.startsWith("/stocktakes")
             ? ["业务", "盘点单"]
-            : ["Lager 仓储"]);
+            : ["Lager"]);
 
   const handleLogout = async () => {
     try {

@@ -1,21 +1,41 @@
+# Lager ERP · Docker Compose（单服务）
+#
+# 一次构建：
+#   docker compose build
+#   docker compose up -d
+#
+# 国内网络默认：
+#   - 基础镜像：DaoCloud 加速（PYTHON_IMAGE 可覆盖）
+#   - apt：中科大 USTC
+#   - pip：清华 TUNA
+# 如果基础镜像拉取失败，设置 PYTHON_IMAGE=python:3.11-slim-bookworm 再 build，
+# 或在宿主机 /etc/docker/daemon.json 配置可用的 registry-mirrors。
+
 services:
   lager:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-docker.m.daocloud.io/library/python:3.11-slim-bookworm}
+        APT_MIRROR: ${APT_MIRROR:-mirrors.ustc.edu.cn}
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
     image: lager-erp:1.1.0
     container_name: lager
     restart: unless-stopped
     init: true
+    stop_grace_period: 30s
     ports:
       - "${APP_PORT:-8000}:8000"
     environment:
+      TZ: ${TZ:-Asia/Shanghai}
+      APP_TIMEZONE: ${APP_TIMEZONE:-Asia/Shanghai}
       DATABASE_URL: sqlite:////app/data/lager.db
+      FRONTEND_DIST: /app/frontend/dist
       SECRET_KEY: ${SECRET_KEY:-}
       ADMIN_INITIAL_PASSWORD: ${ADMIN_INITIAL_PASSWORD:-Admin@12345}
       COOKIE_SECURE: ${COOKIE_SECURE:-false}
       ENABLE_DOCS: ${ENABLE_DOCS:-false}
-      APP_TIMEZONE: ${APP_TIMEZONE:-Asia/Shanghai}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
       SEED_DEMO_DATA: ${SEED_DEMO_DATA:-true}
     volumes:
@@ -27,12 +47,13 @@ services:
       - no-new-privileges:true
     cap_drop:
       - ALL
+    pids_limit: 256
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/system/health', timeout=3)"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/system/health', timeout=3).read()"]
       interval: 30s
       timeout: 5s
       retries: 3
-      start_period: 20s
+      start_period: 30s
     logging:
       driver: json-file
       options:
@@ -41,3 +62,4 @@ services:
 
 volumes:
   lager_data:
+    name: lager_data

@@ -5,7 +5,7 @@ import { toast } from "sonner";
 
 const STEPS = [
   {
-    title: "欢迎使用 Lager 仓储 👋",
+    title: "欢迎使用 Lager 👋",
     intro:
       "这是一套为小团队准备的轻量仓储系统。接下来用 1 分钟带你认识工作台、库存、单据和 AI 助手，随时可以按 Esc 退出。",
   },

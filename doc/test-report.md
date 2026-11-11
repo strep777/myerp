@@ -257,15 +257,23 @@ F:\erp\scripts\backup.py
 
 ### 5.3 Docker
 
-- `docker-compose.yml` 通过 PyYAML 静态解析，服务名 `lager`，`read_only: true`，`cap_drop: ALL`，数据卷 `lager_data`。
-- 本机没有 Docker，**未执行 `docker compose build/up`**，因此不能宣称 Docker 运行验证通过。
-- Dockerfile 和 compose 的构建逻辑、健康检查、非 root 用户已做静态审查；建议在目标 Ubuntu 主机执行：
+- Dockerfile 已改为单镜像：直接复制 `frontend/dist`，不在 Docker 内运行 Node/pnpm；`/app/backend/app` 布局保持 `PROJECT_ROOT=/app`。
+- `docker-compose.yml` 通过 PyYAML 静态解析：服务名 `lager`，`read_only: true`，`cap_drop: ALL`，`pids_limit: 256`，数据卷 `lager_data`，tmpfs `/tmp`。
+- 国内源：基础镜像 `docker.m.daocloud.io/library/python:3.11-slim-bookworm`（已用 Registry API 确认 manifest 200）；apt 使用 USTC（Release 200）；pip 使用 TUNA（Simple 200）。
+- 已检查构建上下文包含 `frontend/dist/index.html`、`backend/app/main.py`、`backend/requirements.txt`；`start.sh` 在 dist 缺失时提前报错。
+- 新增 `F:\erp\scripts\verify_docker.py`，静态校验 compose YAML、read_only/cap_drop/卷/healthcheck、Dockerfile 国内源与预构建 dist、构建上下文；实测输出 `DOCKER CONFIG OK`。
+- 新增 `.gitattributes`：`Dockerfile`、`*.sh`、`docker-compose.yml` 强制 LF，`*.bat` 强制 CRLF，避免 Windows checkout 后 shell/Dockerfile 被转成 CRLF。
+- 本机没有 Docker/podman/WSL 发行版，**未执行 `docker compose build/up`**，因此不能宣称 Docker 运行验证通过。
+- 建议在目标 Ubuntu 主机执行：
 
 ```bash
 cp .env.example .env
 docker compose up -d --build
+docker compose ps
 curl http://127.0.0.1:8000/api/v1/system/health
 ```
+
+- 构建失败排查：先尝试 `PYTHON_IMAGE=python:3.11-slim-bookworm docker compose build`；pip 报错时确认 `PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple`；完全离线用 `docker save` / `docker load` + `docker compose up -d --no-build`。
 
 ## 6. 性能结论
 
@@ -275,7 +283,7 @@ curl http://127.0.0.1:8000/api/v1/system/health
 - 200 行入库确认 165.9 ms（原 568.3 ms）。
 - 44,676 行流水 CSV 1.48 s（原 5.69 s）。
 - 20 客户端混合读写 200 请求，0 错误，p95 351 ms。
-- 前端最新构建产物 gzip 合计约 214.7 KB（index 107.42 + vendor 54.17 + ui 40.18 + CSS 12.89）。
+- 前端最新构建产物 gzip 合计约 214.4 KB（index 107.32 + vendor 54.17 + ui 40.18 + CSS 12.76）。
 
 ## 7. 测试期间修复的缺陷
 

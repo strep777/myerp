@@ -19,8 +19,9 @@ debug.log
 
 # Frontend
 frontend/node_modules/
-frontend/dist/
 frontend/.vite/
+# frontend/dist is intentionally kept: Docker builds copy the prebuilt bundle
+
 
 # Test artifacts
 .ui-test/

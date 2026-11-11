@@ -63,7 +63,7 @@ export function HelpDialog({ open, onOpenChange }: HelpDialogProps) {
           </div>
           <DialogTitle>使用帮助</DialogTitle>
           <DialogDescription>
-            Lager 仓储把日常仓库工作整理成清晰的三步：建档、做单、看报表。
+            Lager 把日常仓库工作整理成清晰的三步：建档、做单、看报表。
           </DialogDescription>
         </DialogHeader>
 

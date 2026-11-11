@@ -12,12 +12,18 @@ if ! docker compose version >/dev/null 2>&1; then
   exit 1
 fi
 
+if [ ! -f frontend/dist/index.html ]; then
+  echo "[ERROR] 缺少 frontend/dist/index.html。" >&2
+  echo "        请先在 frontend 目录执行 pnpm install && pnpm build，或使用包含 dist 的离线交付包。" >&2
+  exit 1
+fi
+
 if [ ! -f .env ]; then
   cp .env.example .env
   echo "[INFO] 已生成 .env。生产部署请编辑其中的 SECRET_KEY 与 ADMIN_INITIAL_PASSWORD。"
 fi
 
-PORT="$(sed -n 's/^APP_PORT=//p' .env | tail -n 1)"
+PORT="$(sed -n 's/^APP_PORT=//p' .env | tail -n 1 | tr -d '\r')"
 PORT="${PORT:-8000}"
 
 docker compose up -d --build

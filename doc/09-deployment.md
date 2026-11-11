@@ -13,7 +13,7 @@ F:\erp\
 ├─ frontend/                # Vite 源码与 dist
 ├─ doc/                     # 全部文档
 ├─ data/                    # SQLite、secret.key（运行时生成，不入库）
-├─ Dockerfile               # 多阶段构建（根目录）
+├─ Dockerfile               # 单镜像构建（复用 frontend/dist，不下载 Node 依赖）
 ├─ docker-compose.yml
 ├─ .env.example
 ├─ .dockerignore
@@ -31,8 +31,10 @@ F:\erp\
 | Docker（推荐） | Docker Engine 24+，Compose v2；2 GB 内存；1 GB 磁盘 |
 | Windows 本机 | Windows 10/11；Python 3.9+（推荐 3.11）；Node 20+ 仅在需要构建前端时 |
 | 浏览器 | Chrome/Edge/Firefox/Safari 最新版 |
-| 网络 | 首次构建需访问 npm/pypi；运行时可离线 |
+| 网络 | 首次构建需拉取 Python 基础镜像与 pip 包（apt 已切 USTC、pip 已切 TUNA）；运行时可离线 |
 | AI（可选） | DeepSeek 需出站 HTTPS 与 API Key；Ollama 需本机/内网服务与模型 |
+
+Docker Engine 本体可从清华 TUNA 的 Docker CE 镜像安装，避免访问 `download.docker.com`：<https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/>。本项目的 apt/pip 构建源已固定为 USTC/TUNA；基础镜像使用 DaoCloud 中国加速（Docker Hub 的 USTC/TUNA pull-through 当前不作为稳定服务提供）。
 
 ## 3. 配置项
 
@@ -49,6 +51,9 @@ F:\erp\
 | `SEED_DEMO_DATA` | `true` | 首次建库是否写入演示商品/仓库/往来单位 |
 | `APP_PORT` | `8000` | Compose 映射到宿主机的端口 |
 | `FRONTEND_DIST` | 自动定位 `frontend/dist` | 静态文件目录，Docker 显式设置 |
+| `PYTHON_IMAGE` | DaoCloud `python:3.11-slim-bookworm` | **仅 Docker 构建**：基础镜像，可换官方/内网 |
+| `APT_MIRROR` | `mirrors.ustc.edu.cn` | **仅 Docker 构建**：Debian apt 镜像主机 |
+| `PIP_INDEX_URL` | `https://pypi.tuna.tsinghua.edu.cn/simple` | **仅 Docker 构建**：pip 索引 |
 
 `.env.example`：
 
@@ -62,6 +67,11 @@ APP_TIMEZONE=Asia/Shanghai
 LOG_LEVEL=INFO
 SEED_DEMO_DATA=true
 APP_PORT=8000
+
+# 可选：仅 Docker 构建用；不填则使用 DaoCloud/USTC/TUNA 默认值
+# PYTHON_IMAGE=docker.m.daocloud.io/library/python:3.11-slim-bookworm
+# APT_MIRROR=mirrors.ustc.edu.cn
+# PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 生成密钥：
@@ -97,6 +107,44 @@ docker compose ps
 
 访问：`http://<服务器IP>:8000`  
 健康检查：`curl http://127.0.0.1:8000/api/v1/system/health`
+
+`start.sh` 会先检查 Docker Compose 与 `frontend/dist/index.html`；缺少前端产物会直接提示，不会构建出空白页面。端口冲突由 Docker 在启动时报告。构建前可运行 `python scripts/verify_docker.py` 做静态检查。
+
+构建说明：
+
+1. Dockerfile 直接复制已经构建好的 `frontend/dist`，构建阶段不再下载 Node、pnpm 或前端 npm 包；只拉取 Python 基础镜像并安装后端依赖。
+2. 默认基础镜像为 `docker.m.daocloud.io/library/python:3.11-slim-bookworm`（DaoCloud 中国加速）；apt 使用中科大 USTC，pip 使用清华 TUNA。
+3. 如果本机无法拉取 DaoCloud 镜像，可改用官方镜像或内网镜像：
+
+```bash
+PYTHON_IMAGE=python:3.11-slim-bookworm docker compose build
+# 或使用公司内网 registry
+PYTHON_IMAGE=registry.example.com/library/python:3.11-slim-bookworm docker compose build
+```
+
+4. 需要换包源时，构建参数可覆盖：
+
+```bash
+APT_MIRROR=mirrors.ustc.edu.cn \
+PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple \
+docker compose build
+```
+
+5. 修改过前端源码后，先在开发机重建并确认 `frontend/dist/index.html` 存在，再执行 `docker compose build`。仓库/离线包中应包含 `frontend/dist`。
+
+6. 完全离线部署：在有网机器构建并导出镜像，在目标机导入后不要加 `--build`：
+
+```bash
+# 有网机器
+docker compose build
+docker save lager-erp:1.1.0 | gzip > lager-erp-1.1.0.tar.gz
+
+# 目标机（已拷贝 tar.gz 与 compose/.env）
+docker load -i lager-erp-1.1.0.tar.gz
+docker compose up -d --no-build
+```
+
+`docker compose up -d --no-build` 会直接使用本地 `lager-erp:1.1.0` 镜像；命名卷 `lager_data` 保留数据库。
 
 首次启动自动：
 1. 创建 `/app/data`（命名卷 `lager_data`）；
@@ -242,88 +290,74 @@ Vite 将 `/api` 代理到 `http://127.0.0.1:8000`。
 
 ## 6. Dockerfile 设计要求
 
-多阶段：
+实际文件见根目录 `Dockerfile`。当前采用**单镜像**：
 
 ```dockerfile
-# 阶段 1：前端构建
-FROM node:20-alpine AS web
-WORKDIR /web
-RUN corepack enable
-COPY frontend/package.json frontend/pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
-COPY frontend/ ./
-RUN pnpm build
-
-# 阶段 2：运行
-FROM python:3.11-slim-bookworm
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1
-WORKDIR /app
+ARG PYTHON_IMAGE=docker.m.daocloud.io/library/python:3.11-slim-bookworm
+FROM ${PYTHON_IMAGE}
+# apt: USTC；pip: TUNA；只装 ca-certificates/tzdata/passwd
+RUN groupadd --gid 10001 lager && useradd --uid 10001 --gid lager --no-create-home lager
 COPY backend/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
-COPY backend/app ./app
-COPY --from=web /web/dist ./frontend/dist
-RUN useradd --uid 10001 --create-home --shell /usr/sbin/nologin lager \
- && mkdir -p /app/data && chown -R lager:lager /app
+COPY --chown=lager:lager backend/app/ ./app/
+COPY --chown=lager:lager frontend/dist/ /app/frontend/dist/
 USER lager
-ENV DATABASE_URL=sqlite:////app/data/lager.db \
-    FRONTEND_DIST=/app/frontend/dist \
-    ENABLE_DOCS=false \
-    PORT=8000
-EXPOSE 8000
-HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-  CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/system/health', timeout=3)"
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
 ```
 
 要点：
-- 前端构建在独立阶段，运行镜像不含 Node。
-- 非 root（UID 10001）；`/app/data` 属主可写。
+- 前端使用仓库内已构建的 `frontend/dist`，镜像不下载 Node/pnpm；修改前端后先构建 dist。
+- 非 root（UID 10001）；`/app/data` 属主可写，根文件系统只读。
 - 单 worker（SQLite 写串行、内存限流一致）。
-- 不复制 `.env`、`data/`、测试文件。
+- 不复制 `.env`、`data/`、测试文件、`node_modules`。
+- `Dockerfile`、`start.sh`、`docker-compose.yml` 保持 LF；`.gitattributes` 已固定，Windows checkout 不会转 CRLF。
+- 构建期 `test -f /app/frontend/dist/index.html`，缺 dist 立即失败。
+- 健康检查使用 Python 标准库，不依赖 curl。
 
 ## 7. docker-compose.yml 设计要求
+
+实际文件见根目录 `docker-compose.yml`。关键点：
 
 ```yaml
 services:
   lager:
-    build: .
+    build:
+      context: .
+      args:
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-docker.m.daocloud.io/library/python:3.11-slim-bookworm}
+        APT_MIRROR: ${APT_MIRROR:-mirrors.ustc.edu.cn}
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
     image: lager-erp:1.1.0
-    container_name: lager
-    restart: unless-stopped
+    init: true
+    stop_grace_period: 30s
     ports:
       - "${APP_PORT:-8000}:8000"
     environment:
+      TZ: ${TZ:-Asia/Shanghai}
+      APP_TIMEZONE: ${APP_TIMEZONE:-Asia/Shanghai}
       DATABASE_URL: sqlite:////app/data/lager.db
+      FRONTEND_DIST: /app/frontend/dist
       SECRET_KEY: ${SECRET_KEY:-}
       ADMIN_INITIAL_PASSWORD: ${ADMIN_INITIAL_PASSWORD:-Admin@12345}
       COOKIE_SECURE: ${COOKIE_SECURE:-false}
       ENABLE_DOCS: ${ENABLE_DOCS:-false}
-      APP_TIMEZONE: ${APP_TIMEZONE:-Asia/Shanghai}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
       SEED_DEMO_DATA: ${SEED_DEMO_DATA:-true}
     volumes:
       - lager_data:/app/data
     read_only: true
     tmpfs:
-      - /tmp
+      - /tmp:size=64m,mode=1777
     security_opt:
       - no-new-privileges:true
     cap_drop:
       - ALL
+    pids_limit: 256
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/system/health', timeout=3)"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/system/health', timeout=3).read()"]
       interval: 30s
       timeout: 5s
       retries: 3
-      start_period: 20s
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-
-volumes:
-  lager_data:
+      start_period: 30s
 ```
 
 注意：

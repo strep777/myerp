@@ -64,7 +64,7 @@ export function useDebouncedValue<T>(value: T, delay = 250): T {
 
 export function useDocumentTitle(title: string) {
   useEffect(() => {
-    document.title = title ? `${title} · Lager 仓储` : "Lager 仓储";
+    document.title = title ? `${title} · Lager` : "Lager";
   }, [title]);
 }
 

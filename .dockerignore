@@ -1,7 +1,10 @@
+# 只给镜像构建发送必需文件，减少上下文与网络传输。
 .git
 .gitignore
 .venv
 venv
+.pnpm-store
+.pytest_cache
 __pycache__
 *.py[cod]
 *.sqlite
@@ -11,17 +14,20 @@ __pycache__
 *.db-shm
 data
 backups
-debug.log
-.env
-docs
 doc
+.ui-test
+.env
+.env.*
 *.md
-!frontend/README.md
+debug.log
+mock-ai-ready.txt
+
+# 前端只保留已构建的 dist；源码/依赖不进入镜像上下文
 frontend/node_modules
-frontend/dist
+frontend/src
 frontend/.vite
 frontend/coverage
+
+# 后端测试与缓存不进入镜像
 backend/.pytest_cache
-tests
-test-report.md
-performance-report.md
+backend/tests

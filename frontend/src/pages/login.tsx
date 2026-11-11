@@ -83,9 +83,9 @@ export function LoginPage() {
               <Boxes className="h-4 w-4" />
             </div>
             <div>
-              <p className="text-[14px] font-semibold tracking-[-0.01em]">Lager 仓储</p>
-              <p className="text-[9px] font-medium uppercase tracking-[0.16em] text-white/40">
-                Warehouse OS
+              <p className="text-[14px] font-semibold tracking-[-0.01em]">Lager</p>
+              <p className="text-[9px] font-medium tracking-[0.14em] text-white/40">
+                仓储管理
               </p>
             </div>
           </div>
@@ -143,27 +143,21 @@ export function LoginPage() {
               </div>
             </div>
             <p className="mt-3 text-[10px] text-white/30">
-              Lager v1.0 · 为专注业务的人而设计
+              Lager v1.1 · 为专注业务的人而设计
             </p>
           </div>
         </section>
 
         <section className="relative flex flex-col justify-center bg-white p-6 sm:p-9">
-          <div className="mac-dots absolute left-6 top-5">
-            <i className="mac-dot-red" />
-            <i className="mac-dot-yellow" />
-            <i className="mac-dot-green" />
-          </div>
-
-          <div className="mx-auto w-full max-w-[340px] pt-5 sm:pt-2">
+          <div className="mx-auto w-full max-w-[340px] pt-2">
             <div className="mb-7 flex items-center gap-2.5 lg:hidden">
               <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-gradient-to-b from-[#3399ff] to-[#007AFF] text-white shadow-sm">
                 <Boxes className="h-[18px] w-[18px]" />
               </div>
               <div>
-                <p className="text-[14px] font-semibold">Lager 仓储</p>
-                <p className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-                  Warehouse
+                <p className="text-[14px] font-semibold">Lager</p>
+                <p className="text-[10px] tracking-[0.12em] text-muted-foreground">
+                  仓储管理
                 </p>
               </div>
             </div>
@@ -240,7 +234,7 @@ export function LoginPage() {
             </div>
 
             <p className="mt-8 text-center text-[10px] text-muted-foreground/70">
-              Lager 仓储 v1.0 · 本系统仅限授权人员使用
+              Lager v1.1 · 本系统仅限授权人员使用
             </p>
           </div>
         </section>
